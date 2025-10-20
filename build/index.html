@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>楓之谷風格橫向捲軸遊戲</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #87CEEB, #E0F6FF);
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        
+        #gameContainer {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        #gameCanvas {
+            border: 2px solid #333;
+            background: linear-gradient(to bottom, #87CEEB, #90EE90);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        
+        #gameInfo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            z-index: 100;
+        }
+        
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            z-index: 100;
+        }
+        
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="gameInfo">
+            <h2>🎮 楓之谷風格橫向捲軸遊戲</h2>
+            <p>版本: 1.0.0 | 狀態: 載入中...</p>
+        </div>
+        
+        <div id="controls">
+            <h3>🎯 遊戲控制</h3>
+            <p>🔄 A/D 或 ←/→ : 移動</p>
+            <p>🦘 空白鍵 或 W/↑ : 跳躍</p>
+            <p>⚔️ J 鍵 : 攻擊</p>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div>🎮 正在載入遊戲...</div>
+            <div style="font-size: 16px; margin-top: 10px;">請稍候，正在初始化楓之谷風格場景</div>
+        </div>
+        
+        <canvas id="gameCanvas" width="800" height="600" style="display: none;"></canvas>
+    </div>
+
+    <script>
+        // 簡單的 2D 遊戲引擎
+        class SimpleGame {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.width = this.canvas.width;
+                this.height = this.canvas.height;
+                
+                // 遊戲狀態
+                this.gameState = 'loading';
+                this.player = {
+                    x: 100,
+                    y: 400,
+                    width: 50,
+                    height: 80,
+                    velocityX: 0,
+                    velocityY: 0,
+                    onGround: false,
+                    facingRight: true
+                };
+                
+                this.platforms = [];
+                this.backgrounds = [];
+                this.keys = {};
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupEventListeners();
+                this.createBackgrounds();
+                this.createPlatforms();
+                this.startGame();
+            }
+            
+            setupEventListeners() {
+                // 鍵盤事件
+                document.addEventListener('keydown', (e) => {
+                    this.keys[e.code] = true;
+                    e.preventDefault();
+                });
+                
+                document.addEventListener('keyup', (e) => {
+                    this.keys[e.code] = false;
+                    e.preventDefault();
+                });
+            }
+            
+            createBackgrounds() {
+                // 天空背景
+                this.backgrounds.push({
+                    type: 'sky',
+                    x: 0,
+                    y: 0,
+                    width: this.width,
+                    height: this.height * 0.6,
+                    color: '#87CEEB'
+                });
+                
+                // 山脈背景
+                this.backgrounds.push({
+                    type: 'mountain',
+                    x: 0,
+                    y: this.height * 0.4,
+                    width: this.width,
+                    height: this.height * 0.4,
+                    color: '#8B7355'
+                });
+                
+                // 樹木背景
+                for (let i = 0; i < 5; i++) {
+                    this.backgrounds.push({
+                        type: 'tree',
+                        x: i * 200 - 100,
+                        y: this.height * 0.6,
+                        width: 100,
+                        height: 200,
+                        color: '#228B22'
+                    });
+                }
+            }
+            
+            createPlatforms() {
+                // 地面
+                this.platforms.push({
+                    x: 0,
+                    y: this.height - 50,
+                    width: this.width,
+                    height: 50,
+                    color: '#90EE90'
+                });
+                
+                // 浮空平台
+                for (let i = 0; i < 5; i++) {
+                    this.platforms.push({
+                        x: 200 + i * 150,
+                        y: 400 - i * 50,
+                        width: 120,
+                        height: 20,
+                        color: '#8B4513'
+                    });
+                }
+            }
+            
+            startGame() {
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('gameCanvas').style.display = 'block';
+                    this.gameState = 'playing';
+                    this.gameLoop();
+                }, 2000);
+            }
+            
+            update() {
+                if (this.gameState !== 'playing') return;
+                
+                // 處理輸入
+                this.handleInput();
+                
+                // 更新玩家物理
+                this.updatePlayer();
+                
+                // 更新相機
+                this.updateCamera();
+            }
+            
+            handleInput() {
+                // 移動
+                if (this.keys['KeyA'] || this.keys['ArrowLeft']) {
+                    this.player.velocityX = -5;
+                    this.player.facingRight = false;
+                } else if (this.keys['KeyD'] || this.keys['ArrowRight']) {
+                    this.player.velocityX = 5;
+                    this.player.facingRight = true;
+                } else {
+                    this.player.velocityX *= 0.8; // 摩擦力
+                }
+                
+                // 跳躍
+                if ((this.keys['Space'] || this.keys['KeyW'] || this.keys['ArrowUp']) && this.player.onGround) {
+                    this.player.velocityY = -15;
+                    this.player.onGround = false;
+                }
+            }
+            
+            updatePlayer() {
+                // 重力
+                this.player.velocityY += 0.8;
+                
+                // 更新位置
+                this.player.x += this.player.velocityX;
+                this.player.y += this.player.velocityY;
+                
+                // 檢查平台碰撞
+                this.checkPlatformCollisions();
+                
+                // 邊界檢查
+                if (this.player.x < 0) this.player.x = 0;
+                if (this.player.x > this.width - this.player.width) {
+                    this.player.x = this.width - this.player.width;
+                }
+            }
+            
+            checkPlatformCollisions() {
+                this.player.onGround = false;
+                
+                for (let platform of this.platforms) {
+                    if (this.player.x < platform.x + platform.width &&
+                        this.player.x + this.player.width > platform.x &&
+                        this.player.y < platform.y + platform.height &&
+                        this.player.y + this.player.height > platform.y) {
+                        
+                        // 從上方落在平台上
+                        if (this.player.velocityY > 0 && this.player.y < platform.y) {
+                            this.player.y = platform.y - this.player.height;
+                            this.player.velocityY = 0;
+                            this.player.onGround = true;
+                        }
+                    }
+                }
+            }
+            
+            updateCamera() {
+                // 簡單的相機跟隨
+                const targetX = this.player.x - this.width / 2;
+                this.cameraX = Math.max(0, Math.min(targetX, this.width * 2 - this.width));
+            }
+            
+            render() {
+                // 清空畫布
+                this.ctx.clearRect(0, 0, this.width, this.height);
+                
+                // 繪製背景
+                this.drawBackgrounds();
+                
+                // 繪製平台
+                this.drawPlatforms();
+                
+                // 繪製玩家
+                this.drawPlayer();
+                
+                // 繪製 UI
+                this.drawUI();
+            }
+            
+            drawBackgrounds() {
+                for (let bg of this.backgrounds) {
+                    this.ctx.fillStyle = bg.color;
+                    
+                    if (bg.type === 'sky') {
+                        const gradient = this.ctx.createLinearGradient(0, 0, 0, bg.height);
+                        gradient.addColorStop(0, '#87CEEB');
+                        gradient.addColorStop(1, '#E0F6FF');
+                        this.ctx.fillStyle = gradient;
+                    }
+                    
+                    this.ctx.fillRect(bg.x, bg.y, bg.width, bg.height);
+                    
+                    if (bg.type === 'tree') {
+                        // 繪製樹幹
+                        this.ctx.fillStyle = '#8B4513';
+                        this.ctx.fillRect(bg.x + 45, bg.y + 100, 10, 100);
+                        
+                        // 繪製樹葉
+                        this.ctx.fillStyle = '#228B22';
+                        this.ctx.beginPath();
+                        this.ctx.arc(bg.x + 50, bg.y + 100, 40, 0, Math.PI * 2);
+                        this.ctx.fill();
+                    }
+                }
+            }
+            
+            drawPlatforms() {
+                for (let platform of this.platforms) {
+                    this.ctx.fillStyle = platform.color;
+                    this.ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+                    
+                    // 平台邊框
+                    this.ctx.strokeStyle = '#654321';
+                    this.ctx.lineWidth = 2;
+                    this.ctx.strokeRect(platform.x, platform.y, platform.width, platform.height);
+                }
+            }
+            
+            drawPlayer() {
+                this.ctx.save();
+                
+                // 翻轉玩家面向
+                if (!this.player.facingRight) {
+                    this.ctx.scale(-1, 1);
+                    this.ctx.translate(-this.player.x * 2 - this.player.width, 0);
+                }
+                
+                // 繪製玩家
+                this.ctx.fillStyle = '#FFDBAC'; // 皮膚色
+                this.ctx.fillRect(this.player.x, this.player.y, this.player.width, this.player.height);
+                
+                // 頭部
+                this.ctx.fillStyle = '#FFDBAC';
+                this.ctx.beginPath();
+                this.ctx.arc(this.player.x + 25, this.player.y + 60, 15, 0, Math.PI * 2);
+                this.ctx.fill();
+                
+                // 身體
+                this.ctx.fillStyle = '#FF6B6B';
+                this.ctx.fillRect(this.player.x + 20, this.player.y + 30, 10, 30);
+                
+                // 腿部
+                this.ctx.fillStyle = '#4ECDC4';
+                this.ctx.fillRect(this.player.x + 18, this.player.y + 10, 6, 20);
+                this.ctx.fillRect(this.player.x + 26, this.player.y + 10, 6, 20);
+                
+                // 手臂
+                this.ctx.fillStyle = '#FFDBAC';
+                this.ctx.fillRect(this.player.x + 15, this.player.y + 35, 5, 15);
+                this.ctx.fillRect(this.player.x + 30, this.player.y + 35, 5, 15);
+                
+                this.ctx.restore();
+            }
+            
+            drawUI() {
+                // 繪製生命值條
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+                this.ctx.fillRect(10, 10, 200, 20);
+                
+                this.ctx.fillStyle = '#00FF00';
+                this.ctx.fillRect(10, 10, 180, 20);
+                
+                this.ctx.fillStyle = 'white';
+                this.ctx.font = '14px Arial';
+                this.ctx.fillText('生命值: 100%', 15, 25);
+            }
+            
+            gameLoop() {
+                this.update();
+                this.render();
+                requestAnimationFrame(() => this.gameLoop());
+            }
+        }
+        
+        // 啟動遊戲
+        window.addEventListener('load', () => {
+            new SimpleGame();
+        });
+    </script>
+</body>
+</html>

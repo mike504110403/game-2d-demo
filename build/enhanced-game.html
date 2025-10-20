@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>楓之谷風格橫向捲軸遊戲 - 完整版</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #87CEEB, #E0F6FF);
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        
+        #gameContainer {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        #gameCanvas {
+            border: 2px solid #333;
+            background: linear-gradient(to bottom, #87CEEB, #90EE90);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        
+        #gameInfo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            z-index: 100;
+        }
+        
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            z-index: 100;
+        }
+        
+        #teleportUI {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            z-index: 100;
+            display: none;
+        }
+        
+        #mapSelector {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            z-index: 100;
+        }
+        
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+        
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            background: #0056b3;
+        }
+        
+        .teleport-btn {
+            background: #28a745;
+        }
+        
+        .teleport-btn:hover {
+            background: #1e7e34;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="gameInfo">
+            <h2>🎮 楓之谷風格橫向捲軸遊戲</h2>
+            <p id="currentMap">當前地圖: 新手村</p>
+            <p id="playerLevel">等級: 1</p>
+            <p id="playerExp">經驗: 0/100</p>
+        </div>
+        
+        <div id="teleportUI">
+            <h3>🚪 傳送點</h3>
+            <p id="teleportInfo">按 E 鍵傳送</p>
+            <button class="btn teleport-btn" onclick="executeTeleport()">傳送</button>
+        </div>
+        
+        <div id="mapSelector">
+            <h3>🗺️ 地圖選擇</h3>
+            <button class="btn" onclick="switchMap('village')">新手村</button>
+            <button class="btn" onclick="switchMap('forest')">神秘森林</button>
+        </div>
+        
+        <div id="controls">
+            <h3>🎯 遊戲控制</h3>
+            <p>🔄 A/D 或 ←/→ : 移動</p>
+            <p>🦘 空白鍵 或 W/↑ : 跳躍</p>
+            <p>⚔️ J 鍵 : 攻擊</p>
+            <p>🚪 E 鍵 : 傳送</p>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div>🎮 正在載入遊戲...</div>
+            <div style="font-size: 16px; margin-top: 10px;">請稍候，正在初始化楓之谷風格場景</div>
+        </div>
+        
+        <canvas id="gameCanvas" width="1000" height="600" style="display: none;"></canvas>
+    </div>
+
+    <script>
+        // 增強版 2D 遊戲引擎
+        class EnhancedGame {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.width = this.canvas.width;
+                this.height = this.canvas.height;
+                
+                // 遊戲狀態
+                this.gameState = 'loading';
+                this.currentMap = 'village';
+                this.player = {
+                    x: 100,
+                    y: 400,
+                    width: 50,
+                    height: 80,
+                    velocityX: 0,
+                    velocityY: 0,
+                    onGround: false,
+                    facingRight: true,
+                    level: 1,
+                    experience: 0,
+                    health: 100,
+                    maxHealth: 100
+                };
+                
+                this.platforms = [];
+                this.backgrounds = [];
+                this.teleports = [];
+                this.keys = {};
+                this.nearTeleport = null;
+                
+                // 地圖配置
+                this.mapConfigs = {
+                    village: {
+                        name: '新手村',
+                        backgrounds: [
+                            { type: 'sky', color: '#87CEEB', y: 0, height: 400 },
+                            { type: 'mountain', color: '#8B7355', y: 200, height: 200 },
+                            { type: 'trees', color: '#228B22', y: 300, height: 100 }
+                        ],
+                        platforms: [
+                            { x: 0, y: 500, width: 1000, height: 100, color: '#90EE90' },
+                            { x: 200, y: 350, width: 150, height: 30, color: '#8B4513' },
+                            { x: 500, y: 300, width: 150, height: 30, color: '#8B4513' },
+                            { x: 800, y: 250, width: 150, height: 30, color: '#8B4513' }
+                        ],
+                        teleports: [
+                            { x: 800, y: 200, target: 'forest', name: '前往神秘森林', color: '#00FFFF' }
+                        ]
+                    },
+                    forest: {
+                        name: '神秘森林',
+                        backgrounds: [
+                            { type: 'sky', color: '#2E8B57', y: 0, height: 400 },
+                            { type: 'mountain', color: '#556B2F', y: 200, height: 200 },
+                            { type: 'trees', color: '#006400', y: 300, height: 100 }
+                        ],
+                        platforms: [
+                            { x: 0, y: 500, width: 1000, height: 100, color: '#228B22' },
+                            { x: 150, y: 400, width: 120, height: 30, color: '#8B4513' },
+                            { x: 400, y: 350, width: 120, height: 30, color: '#8B4513' },
+                            { x: 650, y: 300, width: 120, height: 30, color: '#8B4513' }
+                        ],
+                        teleports: [
+                            { x: -800, y: 200, target: 'village', name: '返回新手村', color: '#FF8000' }
+                        ]
+                    }
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupEventListeners();
+                this.loadMap(this.currentMap);
+                this.startGame();
+            }
+            
+            setupEventListeners() {
+                // 鍵盤事件
+                document.addEventListener('keydown', (e) => {
+                    this.keys[e.code] = true;
+                    e.preventDefault();
+                });
+                
+                document.addEventListener('keyup', (e) => {
+                    this.keys[e.code] = false;
+                    e.preventDefault();
+                });
+            }
+            
+            loadMap(mapName) {
+                const config = this.mapConfigs[mapName];
+                if (!config) return;
+                
+                this.currentMap = mapName;
+                this.backgrounds = config.backgrounds;
+                this.platforms = config.platforms;
+                this.teleports = config.teleports;
+                
+                // 更新UI
+                document.getElementById('currentMap').textContent = `當前地圖: ${config.name}`;
+                
+                console.log(`載入地圖: ${config.name}`);
+            }
+            
+            startGame() {
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('gameCanvas').style.display = 'block';
+                    this.gameState = 'playing';
+                    this.gameLoop();
+                }, 2000);
+            }
+            
+            update() {
+                if (this.gameState !== 'playing') return;
+                
+                this.handleInput();
+                this.updatePlayer();
+                this.checkTeleports();
+                this.updateUI();
+            }
+            
+            handleInput() {
+                // 移動
+                if (this.keys['KeyA'] || this.keys['ArrowLeft']) {
+                    this.player.velocityX = -5;
+                    this.player.facingRight = false;
+                } else if (this.keys['KeyD'] || this.keys['ArrowRight']) {
+                    this.player.velocityX = 5;
+                    this.player.facingRight = true;
+                } else {
+                    this.player.velocityX *= 0.8;
+                }
+                
+                // 跳躍
+                if ((this.keys['Space'] || this.keys['KeyW'] || this.keys['ArrowUp']) && this.player.onGround) {
+                    this.player.velocityY = -15;
+                    this.player.onGround = false;
+                }
+                
+                // 傳送
+                if (this.keys['KeyE'] && this.nearTeleport) {
+                    this.executeTeleport(this.nearTeleport);
+                }
+            }
+            
+            updatePlayer() {
+                // 重力
+                this.player.velocityY += 0.8;
+                
+                // 更新位置
+                this.player.x += this.player.velocityX;
+                this.player.y += this.player.velocityY;
+                
+                // 檢查平台碰撞
+                this.checkPlatformCollisions();
+                
+                // 邊界檢查
+                if (this.player.x < 0) this.player.x = 0;
+                if (this.player.x > this.width - this.player.width) {
+                    this.player.x = this.width - this.player.width;
+                }
+            }
+            
+            checkPlatformCollisions() {
+                this.player.onGround = false;
+                
+                for (let platform of this.platforms) {
+                    if (this.player.x < platform.x + platform.width &&
+                        this.player.x + this.player.width > platform.x &&
+                        this.player.y < platform.y + platform.height &&
+                        this.player.y + this.player.height > platform.y) {
+                        
+                        if (this.player.velocityY > 0 && this.player.y < platform.y) {
+                            this.player.y = platform.y - this.player.height;
+                            this.player.velocityY = 0;
+                            this.player.onGround = true;
+                        }
+                    }
+                }
+            }
+            
+            checkTeleports() {
+                this.nearTeleport = null;
+                
+                for (let teleport of this.teleports) {
+                    const distance = Math.sqrt(
+                        Math.pow(this.player.x - teleport.x, 2) + 
+                        Math.pow(this.player.y - teleport.y, 2)
+                    );
+                    
+                    if (distance < 100) {
+                        this.nearTeleport = teleport;
+                        break;
+                    }
+                }
+                
+                // 顯示/隱藏傳送UI
+                const teleportUI = document.getElementById('teleportUI');
+                if (this.nearTeleport) {
+                    teleportUI.style.display = 'block';
+                    document.getElementById('teleportInfo').textContent = 
+                        `按 E 鍵${this.nearTeleport.name}`;
+                } else {
+                    teleportUI.style.display = 'none';
+                }
+            }
+            
+            executeTeleport(teleport) {
+                if (teleport.target === 'forest') {
+                    this.loadMap('forest');
+                    this.player.x = -800;
+                } else if (teleport.target === 'village') {
+                    this.loadMap('village');
+                    this.player.x = 800;
+                }
+                
+                console.log(`傳送到: ${teleport.name}`);
+            }
+            
+            updateUI() {
+                // 更新玩家資訊
+                document.getElementById('playerLevel').textContent = `等級: ${this.player.level}`;
+                document.getElementById('playerExp').textContent = `經驗: ${this.player.experience}/100`;
+            }
+            
+            render() {
+                this.ctx.clearRect(0, 0, this.width, this.height);
+                
+                this.drawBackgrounds();
+                this.drawPlatforms();
+                this.drawTeleports();
+                this.drawPlayer();
+                this.drawUI();
+            }
+            
+            drawBackgrounds() {
+                for (let bg of this.backgrounds) {
+                    this.ctx.fillStyle = bg.color;
+                    this.ctx.fillRect(0, bg.y, this.width, bg.height);
+                    
+                    if (bg.type === 'trees') {
+                        this.drawTrees();
+                    }
+                }
+            }
+            
+            drawTrees() {
+                for (let i = 0; i < 8; i++) {
+                    const x = i * 150 - 200;
+                    const y = 300;
+                    
+                    // 樹幹
+                    this.ctx.fillStyle = '#8B4513';
+                    this.ctx.fillRect(x + 45, y + 50, 10, 100);
+                    
+                    // 樹葉
+                    this.ctx.fillStyle = '#228B22';
+                    this.ctx.beginPath();
+                    this.ctx.arc(x + 50, y + 50, 40, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+            }
+            
+            drawPlatforms() {
+                for (let platform of this.platforms) {
+                    this.ctx.fillStyle = platform.color;
+                    this.ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+                    
+                    // 平台邊框
+                    this.ctx.strokeStyle = '#654321';
+                    this.ctx.lineWidth = 2;
+                    this.ctx.strokeRect(platform.x, platform.y, platform.width, platform.height);
+                }
+            }
+            
+            drawTeleports() {
+                for (let teleport of this.teleports) {
+                    // 傳送門本體
+                    const gradient = this.ctx.createRadialGradient(
+                        teleport.x, teleport.y, 0,
+                        teleport.x, teleport.y, 40
+                    );
+                    gradient.addColorStop(0, teleport.color);
+                    gradient.addColorStop(1, 'rgba(0,0,0,0)');
+                    
+                    this.ctx.fillStyle = gradient;
+                    this.ctx.beginPath();
+                    this.ctx.arc(teleport.x, teleport.y, 40, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    
+                    // 傳送門邊框
+                    this.ctx.strokeStyle = '#FFFFFF';
+                    this.ctx.lineWidth = 3;
+                    this.ctx.stroke();
+                    
+                    // 傳送門名稱
+                    this.ctx.fillStyle = '#FFFFFF';
+                    this.ctx.font = '14px Arial';
+                    this.ctx.textAlign = 'center';
+                    this.ctx.fillText(teleport.name, teleport.x, teleport.y - 60);
+                }
+            }
+            
+            drawPlayer() {
+                this.ctx.save();
+                
+                if (!this.player.facingRight) {
+                    this.ctx.scale(-1, 1);
+                    this.ctx.translate(-this.player.x * 2 - this.player.width, 0);
+                }
+                
+                // 繪製玩家
+                this.ctx.fillStyle = '#FFDBAC';
+                this.ctx.fillRect(this.player.x, this.player.y, this.player.width, this.player.height);
+                
+                // 頭部
+                this.ctx.fillStyle = '#FFDBAC';
+                this.ctx.beginPath();
+                this.ctx.arc(this.player.x + 25, this.player.y + 60, 15, 0, Math.PI * 2);
+                this.ctx.fill();
+                
+                // 身體
+                this.ctx.fillStyle = '#FF6B6B';
+                this.ctx.fillRect(this.player.x + 20, this.player.y + 30, 10, 30);
+                
+                // 腿部
+                this.ctx.fillStyle = '#4ECDC4';
+                this.ctx.fillRect(this.player.x + 18, this.player.y + 10, 6, 20);
+                this.ctx.fillRect(this.player.x + 26, this.player.y + 10, 6, 20);
+                
+                // 手臂
+                this.ctx.fillStyle = '#FFDBAC';
+                this.ctx.fillRect(this.player.x + 15, this.player.y + 35, 5, 15);
+                this.ctx.fillRect(this.player.x + 30, this.player.y + 35, 5, 15);
+                
+                this.ctx.restore();
+            }
+            
+            drawUI() {
+                // 生命值條
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+                this.ctx.fillRect(10, 10, 200, 20);
+                
+                const healthPercent = this.player.health / this.player.maxHealth;
+                this.ctx.fillStyle = healthPercent > 0.5 ? '#00FF00' : '#FF0000';
+                this.ctx.fillRect(10, 10, 180 * healthPercent, 20);
+                
+                this.ctx.fillStyle = 'white';
+                this.ctx.font = '14px Arial';
+                this.ctx.fillText(`生命值: ${this.player.health}/${this.player.maxHealth}`, 15, 25);
+            }
+            
+            gameLoop() {
+                this.update();
+                this.render();
+                requestAnimationFrame(() => this.gameLoop());
+            }
+        }
+        
+        // 全域函數
+        function switchMap(mapName) {
+            if (window.game) {
+                window.game.loadMap(mapName);
+            }
+        }
+        
+        function executeTeleport() {
+            if (window.game && window.game.nearTeleport) {
+                window.game.executeTeleport(window.game.nearTeleport);
+            }
+        }
+        
+        // 啟動遊戲
+        window.addEventListener('load', () => {
+            window.game = new EnhancedGame();
+        });
+    </script>
+</body>
+</html>

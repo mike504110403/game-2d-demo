@@ -1,0 +1,193 @@
+{
+  "50cbb13d-009a-4122-9aaf-c5a0476a297f": {
+    "url": "db://assets/animations",
+    "value": {},
+    "versionCode": 1
+  },
+  "69cbd1c5-dc49-4d41-91fe-f9beded79470": {
+    "url": "db://assets/audio",
+    "value": {},
+    "versionCode": 1
+  },
+  "28d94492-9dc5-4097-984c-4cf2783d32a8": {
+    "url": "db://assets/fonts",
+    "value": {},
+    "versionCode": 1
+  },
+  "ddd75512-2605-4665-a863-3cbef88b0e3f": {
+    "url": "db://assets/prefabs",
+    "value": {},
+    "versionCode": 1
+  },
+  "a87e4bc9-a5d9-4b22-a182-dc0da8d981d6": {
+    "url": "db://assets/scenes",
+    "value": {},
+    "versionCode": 1
+  },
+  "6ec9233a-7654-4ac8-89cb-2e97344c08f7": {
+    "url": "db://assets/scripts",
+    "value": {},
+    "versionCode": 1
+  },
+  "240bf77f-35cb-4c6f-8171-dd2899516e49": {
+    "url": "db://assets/textures",
+    "value": {},
+    "versionCode": 1
+  },
+  "c6906db2-d751-424d-8ada-d8fe5b9f8940": {
+    "url": "db://assets/scripts/components",
+    "value": {},
+    "versionCode": 1
+  },
+  "bbbf5e29-2865-4d37-b271-03541f7bdca3": {
+    "url": "db://assets/scripts/data",
+    "value": {},
+    "versionCode": 1
+  },
+  "adf40e64-be6e-4a21-a090-87d0558967fb": {
+    "url": "db://assets/scripts/managers",
+    "value": {},
+    "versionCode": 1
+  },
+  "5fdc4035-7834-47a3-874e-66933d615136": {
+    "url": "db://assets/scripts/utils",
+    "value": {},
+    "versionCode": 1
+  },
+  "0fff4c39-5773-42c8-b82e-a4ea2becdaf0": {
+    "url": "db://assets/scripts/cc.d.ts",
+    "value": {},
+    "versionCode": 1
+  },
+  "5141c67f-ca68-479c-86b2-9ee595bc5f0b": {
+    "url": "db://assets/scripts/global.d.ts",
+    "value": {},
+    "versionCode": 1
+  },
+  "fcf830e4-4b54-4112-9e43-1fdaad6762f6": {
+    "url": "db://assets/scripts/components/CameraFollow.js",
+    "value": {},
+    "versionCode": 1
+  },
+  "5777c197-3d39-4662-8757-edf3e95c35b8": {
+    "url": "db://assets/scripts/components/CameraFollow.ts",
+    "value": {},
+    "versionCode": 1
+  },
+  "94304f47-6ffe-4664-a445-81ef7eed0f11": {
+    "url": "db://assets/scripts/components/PlayerController.js",
+    "value": {},
+    "versionCode": 1
+  },
+  "10e7e1df-0868-4e6c-9a04-bc6e2ded9d44": {
+    "url": "db://assets/scripts/components/PlayerController.ts",
+    "value": {},
+    "versionCode": 1
+  },
+  "deb8d344-0ba0-439b-a10f-a412a7e7c222": {
+    "url": "db://assets/scripts/data/GameConstants.ts",
+    "value": {},
+    "versionCode": 1
+  },
+  "5adc91a5-a4c6-4394-a4ce-11906f275f75": {
+    "url": "db://assets/scripts/data/PlayerData.ts",
+    "value": {},
+    "versionCode": 1
+  },
+  "b88434d4-7e73-44c9-815e-ab670af5456d": {
+    "url": "db://assets/scripts/managers/GameManager.js",
+    "value": {},
+    "versionCode": 1
+  },
+  "d9ad4ba3-f50e-4d65-adb9-ca3cfe2bc0e3": {
+    "url": "db://assets/scripts/managers/GameManager.ts",
+    "value": {},
+    "versionCode": 1
+  },
+  "9fc0d713-5995-420a-80f0-20b5e0fa8f37": {
+    "url": "db://assets/scripts/managers/InputManager.js",
+    "value": {},
+    "versionCode": 1
+  },
+  "7b59f590-cd43-4474-a9e5-4c4a4f65bb6b": {
+    "url": "db://assets/scripts/managers/InputManager.ts",
+    "value": {},
+    "versionCode": 1
+  },
+  "33316f45-033e-467c-b317-1c397b6928c0": {
+    "url": "db://assets/scenes/GamePlay.fire",
+    "value": {
+      "depends": [
+        "33316f45-033e-467c-b317-1c397b6928c0",
+        "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "b2c3d4e5-f6g7-8901-bcde-f23456789012",
+        "c3d4e5f6-g7h8-9012-cdef-345678901234",
+        "d4e5f6g7-h8i9-0123-defg-456789012345",
+        "e5f6g7h8-i9j0-1234-efgh-567890123456",
+        "f6g7h8i9-j0k1-2345-fghi-678901234567",
+        "g7h8i9j0-k1l2-3456-ghij-789012345678",
+        "h8i9j0k1-l2m3-4567-hijk-890123456789",
+        "i9j0k1l2-m3n4-5678-ijkl-901234567890",
+        "j0k1l2m3-n4o5-6789-jklm-012345678901",
+        "k1l2m3n4-o5p6-7890-klmn-123456789012"
+      ],
+      "dependScripts": []
+    },
+    "versionCode": 1
+  },
+  "b43816be-66a6-4885-894b-f272c387ba62": {
+    "url": "db://assets/scripts/components/ParallaxBackground.ts",
+    "value": {},
+    "versionCode": 1
+  },
+  "743044b4-8c09-4685-a6f5-a7848cee3311": {
+    "url": "db://assets/scripts/components/PlatformGenerator.ts",
+    "value": {},
+    "versionCode": 1
+  },
+  "24b88ae3-6f62-4d18-a354-f017c725d354": {
+    "url": "db://assets/scripts/scenes/GameScene.ts",
+    "value": {},
+    "versionCode": 1
+  },
+  "121bc788-2eaf-433f-bee2-07f4d96706ca": {
+    "url": "db://assets/scripts/scenes",
+    "value": {},
+    "versionCode": 1
+  },
+  "aef77b5e-2786-4523-8b56-d69b2dd4ccd3": {
+    "url": "db://assets/scripts/scenes/MapleStoryScene.ts",
+    "value": {},
+    "versionCode": 1
+  },
+  "84630ec6-f477-4a7b-aec2-3474a4ebbe6c": {
+    "url": "db://assets/scripts/utils/SceneLoader.ts",
+    "value": {},
+    "versionCode": 1
+  },
+  "88b770d9-3cd4-4fc6-9aee-e3cd4bc83b5c": {
+    "url": "db://assets/scripts/GameStarter.ts",
+    "value": {},
+    "versionCode": 1
+  },
+  "6dde1011-7a0d-42f3-9435-9563fb2c5ca5": {
+    "url": "db://assets/scenes/ForestMap.fire",
+    "value": {
+      "depends": [
+        "6dde1011-7a0d-42f3-9435-9563fb2c5ca5"
+      ],
+      "dependScripts": []
+    },
+    "versionCode": 1
+  },
+  "b61728bd-820b-415f-be45-5bf42a814621": {
+    "url": "db://assets/scripts/components/TeleportPortal.ts",
+    "value": {},
+    "versionCode": 1
+  },
+  "d98b6979-add6-4738-8d0a-dcf89e4950a9": {
+    "url": "db://assets/scripts/managers/SceneManager.ts",
+    "value": {},
+    "versionCode": 1
+  }
+}

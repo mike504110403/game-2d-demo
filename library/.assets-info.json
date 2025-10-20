@@ -1,0 +1,244 @@
+{
+  "version": "1.0.1",
+  "map": {
+    "animations": {
+      "time": 1760605188935.7727,
+      "uuid": "50cbb13d-009a-4122-9aaf-c5a0476a297f"
+    },
+    "audio": {
+      "time": 1760605188935.842,
+      "uuid": "69cbd1c5-dc49-4d41-91fe-f9beded79470"
+    },
+    "fonts": {
+      "time": 1760605188935.872,
+      "uuid": "28d94492-9dc5-4097-984c-4cf2783d32a8"
+    },
+    "prefabs": {
+      "time": 1760605188935.8027,
+      "uuid": "ddd75512-2605-4665-a863-3cbef88b0e3f"
+    },
+    "scenes": {
+      "time": 1760696244277.335,
+      "uuid": "a87e4bc9-a5d9-4b22-a182-dc0da8d981d6"
+    },
+    "scripts": {
+      "time": 1760685141067.8193,
+      "uuid": "6ec9233a-7654-4ac8-89cb-2e97344c08f7"
+    },
+    "textures": {
+      "time": 1760605188935.7297,
+      "uuid": "240bf77f-35cb-4c6f-8171-dd2899516e49"
+    },
+    "scripts/components": {
+      "time": 1760696244277.7783,
+      "uuid": "c6906db2-d751-424d-8ada-d8fe5b9f8940"
+    },
+    "scripts/data": {
+      "time": 1760607833128.373,
+      "uuid": "bbbf5e29-2865-4d37-b271-03541f7bdca3"
+    },
+    "scripts/managers": {
+      "time": 1760696244278.0027,
+      "uuid": "adf40e64-be6e-4a21-a090-87d0558967fb"
+    },
+    "scripts/utils": {
+      "time": 1760684648169.615,
+      "uuid": "5fdc4035-7834-47a3-874e-66933d615136"
+    },
+    "scripts/cc.d.ts": {
+      "time": 1760607516635.1616,
+      "uuid": "0fff4c39-5773-42c8-b82e-a4ea2becdaf0"
+    },
+    "scripts/global.d.ts": {
+      "time": 1760606791633.4128,
+      "uuid": "5141c67f-ca68-479c-86b2-9ee595bc5f0b"
+    },
+    "scripts/components/CameraFollow.js": {
+      "time": 1760606472132.5496,
+      "uuid": "fcf830e4-4b54-4112-9e43-1fdaad6762f6"
+    },
+    "scripts/components/CameraFollow.ts": {
+      "time": 1760606704571.0095,
+      "uuid": "5777c197-3d39-4662-8757-edf3e95c35b8"
+    },
+    "scripts/components/PlayerController.js": {
+      "time": 1760606472132.6287,
+      "uuid": "94304f47-6ffe-4664-a445-81ef7eed0f11"
+    },
+    "scripts/components/PlayerController.ts": {
+      "time": 1760606704570.9539,
+      "uuid": "10e7e1df-0868-4e6c-9a04-bc6e2ded9d44"
+    },
+    "scripts/data/GameConstants.ts": {
+      "time": 1760606696137.6736,
+      "uuid": "deb8d344-0ba0-439b-a10f-a412a7e7c222"
+    },
+    "scripts/data/PlayerData.ts": {
+      "time": 1760606704570.9717,
+      "uuid": "5adc91a5-a4c6-4394-a4ce-11906f275f75"
+    },
+    "scripts/managers/GameManager.js": {
+      "time": 1760606472132.6409,
+      "uuid": "b88434d4-7e73-44c9-815e-ab670af5456d"
+    },
+    "scripts/managers/GameManager.ts": {
+      "time": 1760606704570.9915,
+      "uuid": "d9ad4ba3-f50e-4d65-adb9-ca3cfe2bc0e3"
+    },
+    "scripts/managers/InputManager.js": {
+      "time": 1760685415095.6006,
+      "uuid": "9fc0d713-5995-420a-80f0-20b5e0fa8f37"
+    },
+    "scripts/managers/InputManager.ts": {
+      "time": 1760606704570.9617,
+      "uuid": "7b59f590-cd43-4474-a9e5-4c4a4f65bb6b"
+    },
+    "animations.meta": {
+      "time": 1760607833129.5698
+    },
+    "audio.meta": {
+      "time": 1760607833129.6575
+    },
+    "fonts.meta": {
+      "time": 1760607833129.7388
+    },
+    "prefabs.meta": {
+      "time": 1760607833129.836
+    },
+    "scenes.meta": {
+      "time": 1760607833129.899
+    },
+    "scripts.meta": {
+      "time": 1760607833130.1052
+    },
+    "textures.meta": {
+      "time": 1760607833130.2495
+    },
+    "scripts/components.meta": {
+      "time": 1760607833130.3984
+    },
+    "scripts/data.meta": {
+      "time": 1760607833130.548
+    },
+    "scripts/managers.meta": {
+      "time": 1760607833130.766
+    },
+    "scripts/utils.meta": {
+      "time": 1760607833130.9949
+    },
+    "scripts/cc.d.ts.meta": {
+      "time": 1760607833131.1672
+    },
+    "scripts/global.d.ts.meta": {
+      "time": 1760607833131.3965
+    },
+    "scripts/components/CameraFollow.js.meta": {
+      "time": 1760607833131.76
+    },
+    "scripts/components/PlayerController.js.meta": {
+      "time": 1760607833132.0676
+    },
+    "scripts/managers/GameManager.js.meta": {
+      "time": 1760607833132.5027
+    },
+    "scripts/components/CameraFollow.ts.meta": {
+      "time": 1760607833133.0188
+    },
+    "scripts/managers/InputManager.js.meta": {
+      "time": 1760607833133.2166
+    },
+    "scripts/components/PlayerController.ts.meta": {
+      "time": 1760607833133.3005
+    },
+    "scripts/data/GameConstants.ts.meta": {
+      "time": 1760607833133.384
+    },
+    "scripts/data/PlayerData.ts.meta": {
+      "time": 1760607833133.4487
+    },
+    "scripts/managers/GameManager.ts.meta": {
+      "time": 1760607833133.5095
+    },
+    "scripts/managers/InputManager.ts.meta": {
+      "time": 1760607833135.9238
+    },
+    "scenes/GamePlay.fire.meta": {
+      "time": 1760684581350.1213
+    },
+    "scripts/scenes.meta": {
+      "time": 1760684581346.012
+    },
+    "scripts/components/ParallaxBackground.ts.meta": {
+      "time": 1760684581348.4038
+    },
+    "scripts/components/PlatformGenerator.ts.meta": {
+      "time": 1760684581348.8079
+    },
+    "scripts/scenes/GameScene.ts.meta": {
+      "time": 1760684581348.9292
+    },
+    "scripts/scenes": {
+      "time": 1760684648169.3608,
+      "uuid": "121bc788-2eaf-433f-bee2-07f4d96706ca"
+    },
+    "scripts/components/ParallaxBackground.ts": {
+      "time": 1760684664892.2773,
+      "uuid": "b43816be-66a6-4885-894b-f272c387ba62"
+    },
+    "scripts/components/PlatformGenerator.ts": {
+      "time": 1760684552212.015,
+      "uuid": "743044b4-8c09-4685-a6f5-a7848cee3311"
+    },
+    "scripts/scenes/GameScene.ts": {
+      "time": 1760684664891.0671,
+      "uuid": "24b88ae3-6f62-4d18-a354-f017c725d354"
+    },
+    "scenes/GamePlay.fire": {
+      "time": 1760684832818.8352,
+      "uuid": "33316f45-033e-467c-b317-1c397b6928c0"
+    },
+    "scripts/scenes/MapleStoryScene.ts.meta": {
+      "time": 1760684648171.8171
+    },
+    "scripts/utils/SceneLoader.ts.meta": {
+      "time": 1760684648172
+    },
+    "scripts/scenes/MapleStoryScene.ts": {
+      "time": 1760684664892.4028,
+      "uuid": "aef77b5e-2786-4523-8b56-d69b2dd4ccd3"
+    },
+    "scripts/utils/SceneLoader.ts": {
+      "time": 1760684664900.4382,
+      "uuid": "84630ec6-f477-4a7b-aec2-3474a4ebbe6c"
+    },
+    "scripts/GameStarter.ts.meta": {
+      "time": 1760685141069.5344
+    },
+    "scripts/GameStarter.ts": {
+      "time": 1760684832818.8633,
+      "uuid": "88b770d9-3cd4-4fc6-9aee-e3cd4bc83b5c"
+    },
+    "scenes/ForestMap.fire.meta": {
+      "time": 1760696244285.962
+    },
+    "scripts/components/TeleportPortal.ts.meta": {
+      "time": 1760696244281.2502
+    },
+    "scripts/managers/SceneManager.ts.meta": {
+      "time": 1760696244281.592
+    },
+    "scripts/components/TeleportPortal.ts": {
+      "time": 1760686165852.0188,
+      "uuid": "b61728bd-820b-415f-be45-5bf42a814621"
+    },
+    "scripts/managers/SceneManager.ts": {
+      "time": 1760686165850.817,
+      "uuid": "d98b6979-add6-4738-8d0a-dcf89e4950a9"
+    },
+    "scenes/ForestMap.fire": {
+      "time": 1760696244284.653,
+      "uuid": "6dde1011-7a0d-42f3-9435-9563fb2c5ca5"
+    }
+  },
+  "missing": {}
+}
