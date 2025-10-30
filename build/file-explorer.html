@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>檔案瀏覽器 - 查看你的遊戲檔案</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .file-tree {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .folder {
+            color: #007bff;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 5px 0;
+        }
+        .folder:hover {
+            background: #e9ecef;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        .file {
+            color: #6c757d;
+            margin: 2px 0 2px 20px;
+            font-family: monospace;
+        }
+        .file.exists {
+            color: #28a745;
+        }
+        .file.missing {
+            color: #dc3545;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .path {
+            background: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-family: monospace;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📁 檔案瀏覽器 - 你的遊戲檔案位置</h1>
+            <p>查看你的楓之谷風格橫向捲軸遊戲的所有檔案</p>
+        </div>
+        
+        <div class="status info">
+            <strong>📂 專案根目錄</strong><br>
+            <div class="path">/Users/mike/Documents/self/game-2d-demo/</div>
+        </div>
+        
+        <div id="file-structure">
+            <h3>🎮 你的遊戲檔案結構</h3>
+            <div class="file-tree">
+                <div class="folder" onclick="toggleFolder('assets')">
+                    📁 assets/ (原始開發檔案)
+                </div>
+                <div id="assets" style="display: none; margin-left: 20px;">
+                    <div class="folder" onclick="toggleFolder('assets-scenes')">
+                        📁 scenes/
+                    </div>
+                    <div id="assets-scenes" style="display: none; margin-left: 20px;">
+                        <div class="file exists">✅ GamePlay.fire (你的遊戲場景)</div>
+                    </div>
+                    
+                    <div class="folder" onclick="toggleFolder('assets-scripts')">
+                        📁 scripts/
+                    </div>
+                    <div id="assets-scripts" style="display: none; margin-left: 20px;">
+                        <div class="folder" onclick="toggleFolder('assets-scripts-components')">
+                            📁 components/
+                        </div>
+                        <div id="assets-scripts-components" style="display: none; margin-left: 20px;">
+                            <div class="file exists">✅ PlayerController.ts (玩家控制器)</div>
+                            <div class="file exists">✅ CameraFollow.ts (相機跟隨)</div>
+                            <div class="file exists">✅ ParallaxBackground.ts (視差背景)</div>
+                            <div class="file exists">✅ PlatformGenerator.ts (平台生成器)</div>
+                        </div>
+                        
+                        <div class="folder" onclick="toggleFolder('assets-scripts-managers')">
+                            📁 managers/
+                        </div>
+                        <div id="assets-scripts-managers" style="display: none; margin-left: 20px;">
+                            <div class="file exists">✅ GameManager.ts (遊戲管理器)</div>
+                            <div class="file exists">✅ InputManager.ts (輸入管理器)</div>
+                        </div>
+                        
+                        <div class="folder" onclick="toggleFolder('assets-scripts-scenes')">
+                            📁 scenes/
+                        </div>
+                        <div id="assets-scripts-scenes" style="display: none; margin-left: 20px;">
+                            <div class="file exists">✅ GameScene.ts (遊戲場景)</div>
+                            <div class="file exists">✅ MapleStoryScene.ts (楓之谷場景)</div>
+                        </div>
+                        
+                        <div class="folder" onclick="toggleFolder('assets-scripts-utils')">
+                            📁 utils/
+                        </div>
+                        <div id="assets-scripts-utils" style="display: none; margin-left: 20px;">
+                            <div class="file exists">✅ SceneLoader.ts (場景載入器)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="folder" onclick="toggleFolder('assets-textures')">
+                        📁 textures/ (圖片資源)
+                    </div>
+                    <div id="assets-textures" style="display: none; margin-left: 20px;">
+                        <div class="file missing">❌ 空的 - 需要添加圖片資源</div>
+                    </div>
+                    
+                    <div class="folder" onclick="toggleFolder('assets-audio')">
+                        📁 audio/ (音效資源)
+                    </div>
+                    <div id="assets-audio" style="display: none; margin-left: 20px;">
+                        <div class="file missing">❌ 空的 - 需要添加音效資源</div>
+                    </div>
+                    
+                    <div class="folder" onclick="toggleFolder('assets-animations')">
+                        📁 animations/ (動畫資源)
+                    </div>
+                    <div id="assets-animations" style="display: none; margin-left: 20px;">
+                        <div class="file missing">❌ 空的 - 需要添加動畫資源</div>
+                    </div>
+                </div>
+                
+                <div class="folder" onclick="toggleFolder('build')">
+                    📁 build/ (建置輸出檔案)
+                </div>
+                <div id="build" style="display: none; margin-left: 20px;">
+                    <div class="file exists">✅ index.html (遊戲主頁面)</div>
+                    <div class="file exists">✅ test-assets.html (檔案測試頁面)</div>
+                    <div class="file exists">✅ file-explorer.html (這個檔案瀏覽器)</div>
+                    
+                    <div class="folder" onclick="toggleFolder('build-assets')">
+                        📁 assets/ (複製的資源檔案)
+                    </div>
+                    <div id="build-assets" style="display: none; margin-left: 20px;">
+                        <div class="file exists">✅ 所有 assets/ 中的檔案都已複製到這裡</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="status success">
+            <strong>✅ 你的檔案位置總結</strong><br>
+            • <strong>原始檔案</strong>: 在 <code>assets/</code> 目錄中<br>
+            • <strong>建置檔案</strong>: 在 <code>build/assets/</code> 目錄中<br>
+            • <strong>遊戲頁面</strong>: <code>build/index.html</code><br>
+            • <strong>伺服器</strong>: 正在運行在 <code>http://localhost:8080</code>
+        </div>
+        
+        <div class="status warning">
+            <strong>⚠️ 需要添加的資源</strong><br>
+            • 圖片資源: <code>assets/textures/</code> (目前是空的)<br>
+            • 音效資源: <code>assets/audio/</code> (目前是空的)<br>
+            • 動畫資源: <code>assets/animations/</code> (目前是空的)
+        </div>
+        
+        <div id="actions">
+            <button class="btn" onclick="goToGame()">🎮 前往遊戲</button>
+            <button class="btn" onclick="goToTest()">🔍 測試檔案</button>
+            <button class="btn" onclick="showPaths()">📂 顯示完整路徑</button>
+        </div>
+        
+        <div id="paths" style="display: none;">
+            <h3>📂 完整檔案路徑</h3>
+            <div class="path">原始場景檔案: /Users/mike/Documents/self/game-2d-demo/assets/scenes/GamePlay.fire</div>
+            <div class="path">原始腳本檔案: /Users/mike/Documents/self/game-2d-demo/assets/scripts/</div>
+            <div class="path">建置場景檔案: /Users/mike/Documents/self/game-2d-demo/build/assets/scenes/GamePlay.fire</div>
+            <div class="path">建置腳本檔案: /Users/mike/Documents/self/game-2d-demo/build/assets/scripts/</div>
+            <div class="path">遊戲頁面: /Users/mike/Documents/self/game-2d-demo/build/index.html</div>
+        </div>
+    </div>
+
+    <script>
+        function toggleFolder(folderId) {
+            const folder = document.getElementById(folderId);
+            if (folder.style.display === 'none') {
+                folder.style.display = 'block';
+            } else {
+                folder.style.display = 'none';
+            }
+        }
+        
+        function goToGame() {
+            window.location.href = '/';
+        }
+        
+        function goToTest() {
+            window.location.href = '/test-assets.html';
+        }
+        
+        function showPaths() {
+            const paths = document.getElementById('paths');
+            if (paths.style.display === 'none') {
+                paths.style.display = 'block';
+            } else {
+                paths.style.display = 'none';
+            }
+        }
+        
+        // 自動展開主要資料夾
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('assets').style.display = 'block';
+                document.getElementById('build').style.display = 'block';
+            }, 500);
+        });
+    </script>
+</body>
+</html>

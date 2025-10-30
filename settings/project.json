@@ -1,0 +1,27 @@
+{
+  "name": "game-2d-demo",
+  "version": "1.0.0",
+  "description": "2D橫向捲軸遊戲",
+  "creator": "3.8.0",
+  "engine": "cocos2d-x",
+  "settings": {
+    "orientation": {
+      "landscapeLeft": true,
+      "landscapeRight": true,
+      "portrait": false,
+      "upsideDown": false
+    },
+    "resolution": {
+      "width": 1920,
+      "height": 1080,
+      "policy": "SHOW_ALL"
+    },
+    "physics": {
+      "enabled": true,
+      "gravity": {
+        "x": 0,
+        "y": -980
+      }
+    }
+  }
+}

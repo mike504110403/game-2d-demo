@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>靜態檔案測試頁面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .file-list {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .file-item {
+            padding: 5px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 楓之谷風格遊戲 - 靜態檔案測試</h1>
+        
+        <div id="status-container">
+            <div class="status info">
+                <strong>📁 正在檢查靜態檔案結構...</strong>
+            </div>
+        </div>
+        
+        <div id="file-structure">
+            <h3>📂 檔案結構檢查</h3>
+            <div id="file-list" class="file-list">
+                <div class="file-item">🔄 正在載入檔案列表...</div>
+            </div>
+        </div>
+        
+        <div id="actions">
+            <button class="btn" onclick="checkAssets()">🔍 重新檢查檔案</button>
+            <button class="btn" onclick="goToGame()">🎮 前往遊戲</button>
+            <button class="btn" onclick="goToHome()">🏠 返回首頁</button>
+        </div>
+        
+        <div id="results">
+            <h3>📊 檢查結果</h3>
+            <div id="results-content">
+                <div class="status info">等待檢查完成...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 檢查靜態檔案
+        async function checkAssets() {
+            const statusContainer = document.getElementById('status-container');
+            const fileList = document.getElementById('file-list');
+            const resultsContent = document.getElementById('results-content');
+            
+            // 清空結果
+            fileList.innerHTML = '';
+            resultsContent.innerHTML = '';
+            
+            // 顯示檢查中狀態
+            statusContainer.innerHTML = '<div class="status info"><strong>🔍 正在檢查靜態檔案...</strong></div>';
+            
+            // 要檢查的檔案路徑
+            const assetsToCheck = [
+                { path: 'assets/scenes/GamePlay.fire', name: '遊戲場景', type: 'scene' },
+                { path: 'assets/scripts/components/PlayerController.js', name: '玩家控制器', type: 'script' },
+                { path: 'assets/scripts/components/CameraFollow.js', name: '相機跟隨', type: 'script' },
+                { path: 'assets/scripts/managers/GameManager.js', name: '遊戲管理器', type: 'script' },
+                { path: 'assets/scripts/managers/InputManager.js', name: '輸入管理器', type: 'script' },
+                { path: 'assets/scripts/GameStarter.ts', name: '遊戲啟動器', type: 'script' },
+                { path: 'assets/scripts/scenes/MapleStoryScene.ts', name: '楓之谷場景', type: 'script' },
+                { path: 'assets/scripts/utils/SceneLoader.ts', name: '場景載入器', type: 'script' }
+            ];
+            
+            let successCount = 0;
+            let totalCount = assetsToCheck.length;
+            
+            // 檢查每個檔案
+            for (const asset of assetsToCheck) {
+                try {
+                    const response = await fetch(asset.path);
+                    const status = response.ok ? 'success' : 'error';
+                    const icon = response.ok ? '✅' : '❌';
+                    const message = response.ok ? '檔案存在' : '檔案不存在';
+                    
+                    if (response.ok) successCount++;
+                    
+                    fileList.innerHTML += `
+                        <div class="file-item">
+                            <strong>${icon} ${asset.name}</strong> 
+                            <span style="color: ${response.ok ? 'green' : 'red'}">${message}</span>
+                            <br><small>路徑: ${asset.path}</small>
+                        </div>
+                    `;
+                } catch (error) {
+                    fileList.innerHTML += `
+                        <div class="file-item">
+                            <strong>❌ ${asset.name}</strong> 
+                            <span style="color: red">載入失敗</span>
+                            <br><small>路徑: ${asset.path}</small>
+                        </div>
+                    `;
+                }
+            }
+            
+            // 顯示結果
+            const successRate = Math.round((successCount / totalCount) * 100);
+            const resultClass = successRate >= 80 ? 'success' : successRate >= 50 ? 'info' : 'error';
+            
+            resultsContent.innerHTML = `
+                <div class="status ${resultClass}">
+                    <strong>📊 檢查完成！</strong><br>
+                    成功: ${successCount}/${totalCount} 檔案 (${successRate}%)<br>
+                    ${successRate >= 80 ? '🎉 檔案結構良好！' : successRate >= 50 ? '⚠️ 部分檔案缺失' : '❌ 需要檢查檔案結構'}
+                </div>
+            `;
+            
+            statusContainer.innerHTML = `
+                <div class="status ${resultClass}">
+                    <strong>✅ 靜態檔案檢查完成</strong><br>
+                    成功載入 ${successCount} 個檔案，成功率 ${successRate}%
+                </div>
+            `;
+        }
+        
+        // 前往遊戲
+        function goToGame() {
+            window.location.href = '/';
+        }
+        
+        // 返回首頁
+        function goToHome() {
+            window.location.href = '/';
+        }
+        
+        // 頁面載入時自動檢查
+        window.addEventListener('load', () => {
+            setTimeout(checkAssets, 500);
+        });
+    </script>
+</body>
+</html>

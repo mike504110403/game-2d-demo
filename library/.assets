@@ -1,0 +1,41 @@
+{
+    "version": "1.0.1",
+    "data": {
+        "paths": [
+            "animations",
+            "audio",
+            "fonts",
+            "prefabs",
+            "scenes",
+            "scripts",
+            "textures",
+            "scripts/components",
+            "scripts/data",
+            "scripts/managers",
+            "scripts/scenes",
+            "scripts/utils",
+            "scenes/GamePlay.fire",
+            "scripts/GameStarter.ts",
+            "scripts/cc.d.ts",
+            "scripts/global.d.ts",
+            "scripts/components/CameraFollow.js",
+            "scripts/components/CameraFollow.ts",
+            "scripts/components/ParallaxBackground.ts",
+            "scripts/components/PlatformGenerator.ts",
+            "scripts/components/PlayerController.js",
+            "scripts/components/PlayerController.ts",
+            "scripts/data/GameConstants.ts",
+            "scripts/data/PlayerData.ts",
+            "scripts/managers/GameManager.js",
+            "scripts/managers/GameManager.ts",
+            "scripts/managers/InputManager.js",
+            "scripts/managers/InputManager.ts",
+            "scripts/scenes/GameScene.ts",
+            "scripts/scenes/MapleStoryScene.ts",
+            "scripts/utils/SceneLoader.ts",
+            "scenes/ForestMap.fire",
+            "scripts/components/TeleportPortal.ts",
+            "scripts/managers/SceneManager.ts"
+        ]
+    }
+}
